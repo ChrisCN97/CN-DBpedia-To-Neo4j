@@ -1,10 +1,13 @@
 import csv
 
-#neo4j-admin import --database=CN-DBpedia.db --nodes="../import/node.csv" --relationships="../import/relation.csv" --multiline-fields=true
+# neo4j-admin import --database=neo4j --nodes="../import/node.csv" --relationships="../import/relation.csv" --multiline-fields=true
+
+# CREATE INDEX FOR (n:node) ON (n.name)
 
 if __name__ == "__main__":
     # 改为cn-dbpedia的数据
     dataPath = "../data/sample.txt"
+    #dataPath = r"E:\崔楠\研究生\研0\科研\可解释人项目匹配模型\data\KG\baiketriples\baike_triples.txt"
 
     resourceFile = open(dataPath, encoding='utf-8')
     nodeFile = open("../data/node.csv", "w+", newline='', encoding='utf-8')
@@ -22,6 +25,9 @@ if __name__ == "__main__":
     line = resourceFile.readline()
     while line is not None and line != '':
         n1, r, n2 = line.split('\t')
+        n1 = n1.strip()
+        n2 = n2.strip()
+        r = r.strip()
         # 该图谱最长的节点name长达19759，后期建立索引会失败，可以在这里把过长的节点或关系剔除
         if len(n1)>15 or len(n2)>15 or len(r)>15:
             line = resourceFile.readline()
